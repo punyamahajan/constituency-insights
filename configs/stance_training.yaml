@@ -1,0 +1,98 @@
+seed: 42
+tracking_uri: ./mlruns
+experiment_name: stance-imbalance-comparison
+raw_dir: data/raw/stance/semeval2016_task6
+output_dir: outputs/local/stance_training
+comparison_report: docs/imbalance_comparison.md
+
+training:
+  model_name_or_path: distilbert/distilbert-base-uncased
+  max_length: 128
+  train_batch_size: 8
+  eval_batch_size: 16
+  gradient_accumulation_steps: 2
+  learning_rate: 0.00002
+  weight_decay: 0.01
+  max_epochs: 3
+  warmup_ratio: 0.1
+  max_grad_norm: 1.0
+  early_stopping_patience: 2
+  min_delta: 0.0001
+  mixed_precision: true
+  focal_gamma: 2.0
+  target_conditioned: true
+
+experiments:
+  - name: distilbert_none
+    imbalance_strategy: none
+  - name: distilbert_weighted
+    imbalance_strategy: weighted
+  - name: distilbert_focal
+    imbalance_strategy: focal
+
+finetuning_comparison:
+  experiment_name: stance-finetuning-comparison
+  comparison_report: docs/finetuning_comparison.md
+  multilingual_eval_batch_size: 16
+  experiments:
+    - name: distilbert_full
+      backbone: distilbert-base-uncased
+      tuning_method: full
+      imbalance_strategy: focal
+    - name: xlm_roberta_full
+      backbone: xlm-roberta-base
+      tuning_method: full
+      imbalance_strategy: focal
+    - name: xlm_roberta_lora
+      backbone: xlm-roberta-base
+      tuning_method: lora
+      imbalance_strategy: focal
+      lora_rank: 8
+      lora_alpha: 16
+      lora_dropout: 0.1
+      lora_target_modules: [query, key, value]
+
+optional_backbones:
+  indicbert: ai4bharat/indic-bert
+  muril: google/muril-base-cased
+
+error_analysis:
+  checkpoint: outputs/local/stance_training/finetuning/distilbert_full/best_checkpoint
+  local_error_cases: outputs/local/error_cases.csv
+  report: docs/error_analysis.md
+  bootstrap_resamples: 1000
+  confidence_level: 0.95
+  calibration_bins: 10
+  crossfit_folds: 5
+  inference_batch_size: 16
+  max_length: 128
+  very_short_token_threshold: 8
+
+unsupervised:
+  experiment_name: stance-unsupervised-track
+  report: docs/unsupervised_report.md
+  embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  embedding_cache: outputs/local/unsupervised/embeddings.npy
+  topic_counts: [5, 10, 15, 20]
+  topic_top_words: 10
+  vectorizer_min_df: 3
+  vectorizer_max_features: 5000
+  umap_components: 5
+  umap_neighbors: 15
+  cluster_counts: [5, 10, 15, 20]
+  hdbscan_min_cluster_sizes: [10, 25, 50]
+  stability_seeds: 10
+  semi_supervised:
+    label_fractions: [0.10, 0.25, 0.50]
+    seeds: [42, 43, 44]
+    confidence_threshold: 0.50
+    max_epochs: 2
+    train_batch_size: 8
+    eval_batch_size: 16
+    gradient_accumulation_steps: 2
+    learning_rate: 0.00002
+    weight_decay: 0.01
+    warmup_ratio: 0.1
+    max_grad_norm: 1.0
+    mixed_precision: true
+    max_length: 128

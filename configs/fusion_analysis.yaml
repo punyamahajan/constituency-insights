@@ -1,0 +1,25 @@
+seed: 1729
+linked_text_csv: null
+database: outputs/local/constituency_elections.sqlite
+tabular_results: outputs/local/tabular/results.json
+tracking_uri: sqlite:///mlruns/mlflow.db
+experiment_name: constituency-fusion-synthetic-validation
+output_dir: outputs/local/fusion
+report_path: docs/fusion_report.md
+synthetic:
+  constituencies: 120
+  years: [2004, 2009, 2014, 2019, 2024]
+  text_signal_strength: 1.25
+  tabular_signal_strength: 0.65
+cv:
+  min_train_years: 2
+bootstrap:
+  resamples: 1000
+early_fusion:
+  tabular_hidden: 12
+  text_hidden: 8
+  joint_hidden: 12
+  epochs: 60
+  learning_rate: 0.005
+  batch_size: 64
+  patience: 8

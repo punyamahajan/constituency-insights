@@ -1,0 +1,16 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    environment:
+      MODEL_GCS_BUCKET: ${MODEL_GCS_BUCKET:?Set MODEL_GCS_BUCKET in a private .env file}
+      MODEL_GCS_OBJECT: ${MODEL_GCS_OBJECT:?Set MODEL_GCS_OBJECT in a private .env file}
+      MODEL_GCS_ARCHIVE_SHA256: ${MODEL_GCS_ARCHIVE_SHA256:?Set MODEL_GCS_ARCHIVE_SHA256 in a private .env file}

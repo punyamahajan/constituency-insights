@@ -1,0 +1,16 @@
+.git
+.venv
+__pycache__
+*.pyc
+outputs/local/*
+!outputs/local/stance_training/
+!outputs/local/stance_training/finetuning/
+!outputs/local/stance_training/finetuning/distilbert_full/
+!outputs/local/stance_training/finetuning/distilbert_full/best_checkpoint/
+!outputs/local/stance_training/finetuning/distilbert_full/best_checkpoint/**
+mlruns
+data/raw
+data/processed
+tests
+notebooks
+docs

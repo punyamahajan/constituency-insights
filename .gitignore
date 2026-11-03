@@ -218,3 +218,31 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Constituency Insights datasets
+data/raw/**
+data/processed/**
+!data/raw/README.md
+!data/raw/stance/
+!data/raw/stance/README.md
+!data/processed/README.md
+!data/processed/stance/
+!data/processed/stance/README.md
+
+# Model artifacts and experiment outputs
+artifacts/
+models/
+checkpoints/
+results/
+experiments/
+mlruns/
+outputs/local/
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+
+# Additional local environment files
+.env.*
+!.env.example

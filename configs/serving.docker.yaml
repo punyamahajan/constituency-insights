@@ -1,0 +1,14 @@
+stance:
+  checkpoint: /app/models/stance
+  checkpoint_sha256: c59ffaa1776d9af28aa64332877fd8971a1a2b760ffb207e03d828e3118170df
+  max_length: 128
+  training_date: "2026-11-03"
+outcome:
+  artifact: /app/models/outcome_model.joblib
+  conformal: /app/models/conformal.json
+  feature_order: [previous_vote_share, previous_margin, swing, turnout_change, population, literacy_rate, urban_share, scheduled_caste_share]
+  training_date: null
+service:
+  max_text_length: 2000
+  max_target_length: 200
+  max_features: 32

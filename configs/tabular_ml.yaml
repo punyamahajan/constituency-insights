@@ -1,0 +1,53 @@
+seed: 1729
+database: outputs/local/constituency_elections.sqlite
+tracking_uri: ./mlruns
+experiment_name: constituency-tabular-ml
+output_dir: outputs/local/tabular
+report_path: docs/tabular_report.md
+cv:
+  min_train_years: 2
+  calibration_years: 1
+tuning:
+  trials: 20
+  timeout_seconds: null
+  model_choices: [logistic, random_forest, xgboost, mlp]
+  logistic_c: [0.001, 100.0]
+  random_forest_n_estimators: [100, 500, 100]
+  random_forest_max_depth: [3, 15]
+  xgboost_n_estimators: [100, 500, 100]
+  xgboost_max_depth: [2, 8]
+  xgboost_learning_rate: [0.01, 0.2]
+  mlp_hidden_sizes: [16, 32, 64]
+  mlp_learning_rate: [0.0001, 0.01]
+models:
+  logistic:
+    c_low: 0.001
+    c_high: 100.0
+  random_forest:
+    n_estimators: 300
+    max_depth: [4, 8, 12, null]
+  xgboost:
+    n_estimators: 300
+    max_depth_low: 2
+    max_depth_high: 8
+  mlp:
+    hidden_size: 32
+    epochs: 50
+    learning_rate: 0.001
+    batch_size: 32
+    patience: 7
+conformal:
+  nominal_coverage: 0.9
+calibration:
+  bins: 10
+interpretability:
+  local_examples: 5
+clustering:
+  oof_predictions: outputs/local/tabular/oof_predictions.csv
+  output_dir: outputs/local/clustering
+  report_path: docs/clustering_report.md
+  k_values: [2, 3, 4, 5, 6, 7, 8]
+  correlation_threshold: 0.9
+  stability_resamples: 20
+  bootstrap_resamples: 1000
+  chosen_algorithm: kmeans

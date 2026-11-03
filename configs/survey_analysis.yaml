@@ -1,0 +1,23 @@
+seed: 1729
+input_csv: data/demo/survey_demo.csv
+is_synthetic_demo: true
+output_dir: outputs/local/survey
+report_path: docs/survey_report.md
+tracking_uri: sqlite:///mlruns/mlflow.db
+experiment_name: constituency-survey-analysis
+schema:
+  respondent_id: respondent_id
+  demographics: [age_group, gender, region, constituency]
+  weight: weight
+  outcome: vote_intention
+analysis:
+  logistic_predictors: [age_group, gender]
+  raking_margin_variables: [age_group, gender]
+  mrp_demographics: [age_group, gender, region]
+  constituency: constituency
+  population_count: population
+raking:
+  tolerance: 0.000001
+  max_iterations: 500
+mrp:
+  regularization: 0.1
